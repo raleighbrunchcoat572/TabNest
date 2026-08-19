@@ -52,13 +52,24 @@ jobs:
         shell: pwsh
         run: |
           $tag = "${{ github.event.inputs.tag || github.ref_name }}" -replace '^v',''
-          $props = Select-String -Path Directory.Build.props -Pattern '<Version>(.+?)</Version>'
-          $version = $props.Matches[0].Groups[1].Value
-          $iss = Select-String -Path packaging/TabNest.iss -Pattern '#define AppVersion "(.+?)"'
-          $issVersion = $iss.Matches[0].Groups[1].Value
+
+          $version = (Select-String -Path Directory.Build.props `
+            -Pattern '<Version>(.+?)</Version>').Matches[0].Groups[1].Value
+          $issVersion = (Select-String -Path packaging/TabNest.iss `
+            -Pattern '#define AppVersion "(.+?)"').Matches[0].Groups[1].Value
+
           "标签 $tag / Directory.Build.props $version / TabNest.iss $issVersion"
+
           if ($version -ne $tag -or $issVersion -ne $tag) {
             throw "版本号不一致：标签 $tag，props $version，iss $issVersion"
+          }
+
+          # 官网首屏那句「0.1.2 · 零 DLL 注入」也要跟上。
+          # 下载链接已改为 /releases/latest/download/ 不会过期，但这句文案会 ——
+          # 而一个写着旧版本号的落地页会让人以为项目停更了。
+          $page = Get-Content docs/index.html -Raw
+          if ($page -notmatch [regex]::Escape("$tag · 零 DLL 注入")) {
+            throw "docs/index.html 首屏的版本号不是 $tag，请更新后再打标签"
           }
 
       - name: 打安装包
@@ -69,6 +80,16 @@ jobs:
           if (-not (Test-Path $iscc)) { throw "运行器上找不到 Inno Setup" }
           & $iscc packaging/TabNest.iss
           if ($LASTEXITCODE -ne 0) { throw "打包失败" }
+
+      # 官网的下载按钮走 /releases/latest/download/<文件名>，那条 URL 永远指向
+      # 最新 Release，前提是**文件名不含版本号**。因此除了带版本号的安装包，
+      # 再传一份固定名字的副本 —— 否则每次发版都得回去手改官网链接，
+      # 而漏改的后果是下载按钮把人送到旧版本。
+      - name: 生成固定文件名的安装包副本
+        shell: pwsh
+        run: |
+          $tag = "${{ github.event.inputs.tag || github.ref_name }}" -replace '^v',''
+          Copy-Item "publish/installer/TabNest-$tag-setup.exe" "publish/installer/TabNest-setup.exe" -Force
 
       - name: 计算校验值
         id: hash
@@ -121,10 +142,12 @@ jobs:
             gh release edit $tag --notes-file notes.md
             gh release upload $tag `
               "publish/v1/TabNest.exe" `
-              "publish/installer/TabNest-$version-setup.exe" --clobber
+              "publish/installer/TabNest-$version-setup.exe" `
+              "publish/installer/TabNest-setup.exe" --clobber
           } else {
             gh release create $tag `
               "publish/v1/TabNest.exe" `
               "publish/installer/TabNest-$version-setup.exe" `
+              "publish/installer/TabNest-setup.exe" `
               --title "TabNest $tag" --notes-file notes.md
           }

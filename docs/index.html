@@ -24,7 +24,7 @@
         <a href="#compare">对照</a>
         <a href="#download">下载</a>
         <a href="https://github.com/mtcto/TabNest">GitHub</a>
-        <a class="btn btn-cta" href="https://github.com/mtcto/TabNest/releases/download/v0.1.1/TabNest-0.1.1-setup.exe">下载 0.1.1</a>
+        <a class="btn btn-cta" href="https://github.com/mtcto/TabNest/releases/latest/download/TabNest-setup.exe">下载 0.1.2</a>
       </nav>
     </div>
   </header>
@@ -32,15 +32,15 @@
   <main>
     <section class="hero">
       <div class="wrap">
-        <p class="eyebrow"><span class="dot" aria-hidden="true"></span> 0.1.1 · 阶段一 · 零 DLL 注入</p>
+        <p class="eyebrow"><span class="dot" aria-hidden="true"></span> 0.1.2 · 零 DLL 注入</p>
         <h1>给每一个 Windows 窗口加上浏览器式标签</h1>
         <p class="lede">
           把 IDE、终端、浏览器、资源管理器收进同一个标签组。拖上去合并，拖出来拆分。
           TabNest 只管理<strong>窗口</strong>，不进任何进程，也不碰你的文件。
         </p>
         <div class="btn-row">
-          <a class="btn btn-cta" href="https://github.com/mtcto/TabNest/releases/download/v0.1.1/TabNest-0.1.1-setup.exe">安装包</a>
-          <a class="btn btn-ghost" href="https://github.com/mtcto/TabNest/releases/download/v0.1.1/TabNest.exe">单文件 exe</a>
+          <a class="btn btn-cta" href="https://github.com/mtcto/TabNest/releases/latest/download/TabNest-setup.exe">安装包</a>
+          <a class="btn btn-ghost" href="https://github.com/mtcto/TabNest/releases/latest/download/TabNest.exe">单文件 exe</a>
         </div>
 
         <figure class="rail-card" aria-label="分组栏示意">
@@ -80,8 +80,8 @@
             <p>每次改窗口位置之前先落盘快照。崩溃、强杀、卸载，窗口和任务栏按钮都会回去。</p>
           </article>
           <article class="card">
-            <h3>空闲接近于零</h3>
-            <p>20 秒采样 CPU 0.000%，工作集约 35 MB。没有轮询，每一次唤醒都对应真实窗口事件。</p>
+            <h3>空闲开销测不出来</h3>
+            <p>空闲时的 CPU 占用压在测量分辨率的地板上，工作集约 32 MB。没有轮询，每一次唤醒都对应真实窗口事件。</p>
           </article>
           <article class="card">
             <h3>开关必须真的有效</h3>
@@ -100,8 +100,9 @@
         <p class="section-kicker">对照 Groupy 2</p>
         <h2 class="section-title">数字来自同一台机器的实测，不是估算。</h2>
         <p class="section-copy">
-          标本是 Groupy 2 v2.3.1 与 TabNest 0.1.0，Windows 11 26100 x64。
-          你的数字会不同。集成标题栏仍是阶段二，今天做不到。
+          标本是 Groupy 2 v2.3.1 与 TabNest 0.1.2，Windows 11 26100 x64，空闲 20 秒。
+          你的数字会不同。把标签画进原生标题栏必须在目标进程内执行代码，TabNest 不做这件事 ——
+          不是还没做，是不打算做。
         </p>
         <div class="table-wrap">
           <table>
@@ -115,13 +116,27 @@
             <tbody>
               <tr><th>许可</th><td>MIT，开源</td><td>商业，闭源</td></tr>
               <tr><th>向其他进程注入</th><td>无</td><td>测试机 46 个进程</td></tr>
-              <tr><th>常驻工作集</th><td>35.2 MB</td><td>78 MB</td></tr>
-              <tr><th>空闲 CPU</th><td>0.000%</td><td>单核 0.08%</td></tr>
+              <tr><th>常驻工作集</th><td>32.1 MB</td><td>78 MB</td></tr>
+              <tr><th>空闲 CPU</th><td>单核 0.00~0.08%</td><td>单核 0.08%</td></tr>
+              <tr><th>线程数</th><td>15</td><td>30</td></tr>
+              <tr><th>句柄数</th><td>343</td><td>706</td></tr>
               <tr><th>下载体积</th><td>11.3 MB 单文件</td><td>24.6 MB 安装包</td></tr>
-              <tr><th>标签画进原生标题栏</th><td>阶段二</td><td>有</td></tr>
+              <tr><th>标签画进原生标题栏</th><td>无，刻意如此</td><td>有</td></tr>
+              <tr><th>替换资源管理器原生标签</th><td>无</td><td>有</td></tr>
+              <tr><th>代码签名</th><td>暂无</td><td>有</td></tr>
             </tbody>
           </table>
         </div>
+        <p class="section-copy" style="margin-top:20px">
+          空闲 CPU 那一行是打平，不是赢：单核 0.08% 在 20 秒里就是 16 毫秒，一个调度时钟节拍，
+          也就是这种测法的分辨率地板，Groupy 落在同样的 16 毫秒上。这里如实写出来，
+          是因为本表早先的版本声称过一个数据并不支持的差距。
+        </p>
+        <p class="section-copy">
+          Groupy 确实更强的地方：集成标签、原生标签替换、文档级规则、悬停预览、已签名的二进制，
+          以及多年积累的兼容性工作。前四项都要求在别人的进程里跑代码。
+          如果你需要标签画在真正的标题栏里，那就买 Groupy —— 它是个好产品。
+        </p>
       </div>
     </section>
 
@@ -134,14 +149,15 @@
           配置在 <code style="font-family:var(--font-mono);font-size:13px;color:var(--fg)">%LOCALAPPDATA%\TabNest\</code>，卸载时保留。
         </p>
         <div class="btn-row" style="margin-bottom:32px">
-          <a class="btn btn-cta" href="https://github.com/mtcto/TabNest/releases/download/v0.1.1/TabNest-0.1.1-setup.exe">TabNest-0.1.1-setup.exe</a>
-          <a class="btn btn-ghost" href="https://github.com/mtcto/TabNest/releases/download/v0.1.1/TabNest.exe">TabNest.exe</a>
+          <a class="btn btn-cta" href="https://github.com/mtcto/TabNest/releases/latest/download/TabNest-setup.exe">TabNest-setup.exe</a>
+          <a class="btn btn-ghost" href="https://github.com/mtcto/TabNest/releases/latest/download/TabNest.exe">TabNest.exe</a>
         </div>
         <div class="warn">
           <h3>这是未签名版本</h3>
           <p>没有 Authenticode 证书。首次运行 SmartScreen 可能提示「Windows 已保护你的电脑」。</p>
           <ol>
-            <li>点「更多信息」，确认文件名是 TabNest.exe 或 TabNest-0.1.1-setup.exe。</li>
+            <li>点「更多信息」，确认文件名是 TabNest.exe 或 TabNest-setup.exe。</li>
+            <li>校验哈希：<a href="https://github.com/mtcto/TabNest/releases/latest">Release 页面</a>列了两个文件的 SHA256。</li>
             <li>再点「仍要运行」。安装包和装好的程序可能各拦一次。</li>
             <li>杀软若隔离，只从本仓库的 GitHub Release 恢复。</li>
             <li>需要签名版请自行购买 OV 证书再签；官方不提供已签名二进制。</li>
